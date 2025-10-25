@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - ShopEasy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--primary-color) !important;
+        }
+        
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+        
+        .footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 50px 0;
+        }
+        
+        .empty-cart i {
+            font-size: 5rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .order-summary {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 50px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-shopping-bag me-2"></i>ShopEasy
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.html">
+                            Cart <span id="cart-count" class="badge bg-primary rounded-pill">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <h1 class="mb-4">Checkout</h1>
+        
+        <!-- Empty Cart Message -->
+        <div id="empty-cart" class="empty-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>Your cart is empty</h3>
+            <p>Browse our products and add items to your cart</p>
+            <a href="index.html" class="btn btn-primary">Start Shopping</a>
+        </div>
+        
+        <!-- Success Message -->
+        <div id="success-message" class="success-message">
+            <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+            <h3 class="mt-3">Order Placed Successfully!</h3>
+            <p class="lead">Thank you for your purchase. Your order has been confirmed.</p>
+            <a href="index.html" class="btn btn-primary">Continue Shopping</a>
+        </div>
+        
+        <!-- Checkout Form -->
+        <div id="checkout-content">
+            <div class="row">
+                <!-- Order Summary -->
+                <div class="col-md-5 order-md-2 mb-4">
+                    <div class="order-summary">
+                        <h4 class="d-flex justify-content-between align-items-center mb-3">
+                            <span>Order Summary</span>
+                            <span class="badge bg-primary rounded-pill" id="summary-item-count">0</span>
+                        </h4>
+                        <ul class="list-group mb-3" id="order-items">
+                            <!-- Order items will be loaded here -->
+                        </ul>
+                        
+                        <div class="d-flex justify-content-between">
+                            <span>Subtotal:</span>
+                            <span id="summary-subtotal">$0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Shipping:</span>
+                            <span id="summary-shipping">$0.00</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between fw-bold">
+                            <span>Total:</span>
+                            <span id="summary-total">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Checkout Form -->
+                <div class="col-md-7 order-md-1">
+                    <form id="checkout-form" novalidate>
+                        <h4 class="mb-3">Shipping Information</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName" class="form-label">First name</label>
+                                <input type="text" class="form-control" id="firstName" required>
+                                <div class="invalid-feedback">
+                                    Valid first name is required.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName" class="form-label">Last name</label>
+                                <input type="text" class="form-control" id="lastName" required>
+                                <div class="invalid-feedback">
+                                    Valid last name is required.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
+                            <div class="invalid-feedback">
+                                Please enter a valid email address.
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+                            <div class="invalid-feedback">
+                                Please enter your shipping address.
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-5 mb-3">
+                                <label for="country" class="form-label">Country</label>
+                                <select class="form-select" id="country" required>
+                                    <option value="">Choose...</option>
+                                    <option>United States</option>
+                                    <option>Canada</option>
+                                    <option>United Kingdom</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a valid country.
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="state" class="form-label">State</label>
+                                <select class="form-select" id="state" required>
+                                    <option value="">Choose...</option>
+                                    <option>California</option>
+                                    <option>New York</option>
+                                    <option>Texas</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please provide a valid state.
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="zip" class="form-label">Zip</label>
+                                <input type="text" class="form-control" id="zip" required>
+                                <div class="invalid-feedback">
+                                    Zip code required.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr class="mb-4">
+                        
+                        <h4 class="mb-3">Payment</h4>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cc-name" class="form-label">Name on card</label>
+                                <input type="text" class="form-control" id="cc-name" required>
+                                <small class="text-muted">Full name as displayed on card</small>
+                                <div class="invalid-feedback">
+                                    Name on card is required
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cc-number" class="form-label">Credit card number</label>
+                                <input type="text" class="form-control" id="cc-number" required>
+                                <div class="invalid-feedback">
+                                    Credit card number is required
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="cc-expiration" class="form-label">Expiration</label>
+                                <input type="text" class="form-control" id="cc-expiration" placeholder="MM/YY" required>
+                                <div class="invalid-feedback">
+                                    Expiration date required
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="cc-cvv" class="form-label">CVV</label>
+                                <input type="text" class="form-control" id="cc-cvv" required>
+                                <div class="invalid-feedback">
+                                    Security code required
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr class="mb-4">
+                        
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">Place Order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>ShopEasy</h5>
+                    <p>Your one-stop destination for all your shopping needs. Quality products at affordable prices.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-white">Home</a></li>
+                        <li><a href="cart.html" class="text-white">Cart</a></li>
+                        <li><a href="#" class="text-white">About Us</a></li>
+                        <li><a href="#" class="text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <address class="text-white">
+                        <i class="fas fa-map-marker-alt me-2"></i> 123 Shop Street, City<br>
+                        <i class="fas fa-phone me-2"></i> (123) 456-7890<br>
+                        <i class="fas fa-envelope me-2"></i> info@shopeasy.com
+                    </address>
+                </div>
+            </div>
+            <hr class="bg-light">
+            <div class="text-center">
+                <p>&copy; 2023 ShopEasy. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Global variables
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // DOM Content Loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update cart count in navigation
+            updateCartCount();
+            
+            // Display checkout content based on cart
+            displayCheckoutContent();
+            
+            // Set up form submission
+            document.getElementById('checkout-form').addEventListener('submit', placeOrder);
+        });
+
+        // Display checkout content based on cart
+        function displayCheckoutContent() {
+            const emptyCartMessage = document.getElementById('empty-cart');
+            const checkoutContent = document.getElementById('checkout-content');
+            const successMessage = document.getElementById('success-message');
+            
+            // Hide success message initially
+            successMessage.style.display = 'none';
+            
+            if (cart.length === 0) {
+                emptyCartMessage.style.display = 'block';
+                checkoutContent.style.display = 'none';
+            } else {
+                emptyCartMessage.style.display = 'none';
+                checkoutContent.style.display = 'block';
+                displayOrderSummary();
+            }
+        }
+
+        // Display order summary
+        function displayOrderSummary() {
+            const orderItemsContainer = document.getElementById('order-items');
+            const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const shipping = subtotal > 50 ? 0 : 5.99; // Free shipping over $50
+            const total = subtotal + shipping;
+            
+            // Update item count
+            document.getElementById('summary-item-count').textContent = itemCount;
+            
+            // Display order items
+            orderItemsContainer.innerHTML = cart.map(item => `
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <div class="d-flex align-items-center">
+                        <img src="${item.image}" class="cart-item-image me-3" alt="${item.title}">
+                        <div>
+                            <h6 class="my-0">${item.title.substring(0, 30)}${item.title.length > 30 ? '...' : ''}</h6>
+                            <small class="text-muted">Qty: ${item.quantity}</small>
+                        </div>
+                    </div>
+                    <span class="text-muted">$${(item.price * item.quantity).toFixed(2)}</span>
+                </li>
+            `).join('');
+            
+            // Update summary totals
+            document.getElementById('summary-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('summary-shipping').textContent = shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`;
+            document.getElementById('summary-total').textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Update cart count in navigation
+        function updateCartCount() {
+            const cartCount = document.getElementById('cart-count');
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+
+        // Place order
+        function placeOrder(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const form = document.getElementById('checkout-form');
+            
+            // Check form validity
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                return;
+            }
+            
+            // In a real application, you would send the order data to a server here
+            
+            // Show success message
+            document.getElementById('checkout-content').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+            
+            // Clear cart from localStorage
+            localStorage.removeItem('cart');
+            cart = [];
+            
+            // Update cart count
+            updateCartCount();
+            
+            // Optional: Redirect to home page after 5 seconds
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
